@@ -1,4 +1,4 @@
-# CouponsProject_JPA
+# CouponsProject_v3_JPA
 
 This is the JPA version for the ***Coupons*** project. (final project of john bryce academy)
 
