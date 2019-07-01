@@ -1,6 +1,6 @@
 # CouponsProject-JPA
 
-This is the JPA version of the **Coupons** project. (final project of john bryce academy)
+This is the JPA version for the **Coupons** project. (final project of john bryce academy)
 
 ***Coupons*** is a coupon management system.
 
