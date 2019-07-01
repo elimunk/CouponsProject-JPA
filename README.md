@@ -16,12 +16,12 @@ Customers - can buy coupons
 The system contains the following levels:  
 *Entitys* for all of the resources,  
 *Dao*,  
-*Controller*,  
+*Controllers*,  
 *Api*,  
 *Exception handler*,  
 *Utils*,  
-*Filter*,  
-*Daily job* for delete expired coupons
+*Filters*,  
+*Daily job* to delete expired coupons
 
 
 
