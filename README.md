@@ -1,6 +1,6 @@
 # CouponsProject-JPA
 
-This is the JPA version for the **Coupons** project. (final project of john bryce academy)
+This is the JPA version for the ***Coupons*** project. (final project of john bryce academy)
 
 ***Coupons*** is a coupon management system.
 
@@ -20,8 +20,8 @@ The system contains the following levels:
 *Api*,  
 *Exception handler*,  
 *Utils*,  
-*Filter*,
-And *daily job* for delete expired coupons
+*Filter*,  
+*Daily job* for delete expired coupons
 
 
 
