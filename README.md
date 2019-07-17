@@ -18,7 +18,7 @@ The system contains the following levels:
 *Dao*,  
 *Controllers*,  
 *Api*,  
-*Exception handler*,  
+*Exceptions*,  
 *Utils*,  
 *Filters*,  
 *Daily job* to delete expired coupons
