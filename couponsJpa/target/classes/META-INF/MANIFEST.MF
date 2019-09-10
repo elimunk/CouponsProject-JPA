@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Implementation-Title: CouponsV3
+Implementation-Title: CouponsJpa
 Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: elianna
 Implementation-Vendor-Id: com.elimunk.spring.jpa

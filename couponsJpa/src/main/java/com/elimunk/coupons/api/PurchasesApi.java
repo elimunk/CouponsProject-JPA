@@ -25,15 +25,16 @@ public class PurchasesApi {
 
 	@Autowired
 	private PurchasesController purchasesController;
-	
+
 	@PostMapping
 	public long createPurchace(@RequestBody Purchase purchase, HttpServletRequest request) throws ApplicationException {
 		PostLoginUserData userData = (PostLoginUserData) request.getAttribute("userData");
 		return purchasesController.createPurchace(purchase, userData);
 	}
-	
+
 	@DeleteMapping("/{purchaseId}")
-	public void deletePurchase(@PathVariable ("purchaseId") long id, HttpServletRequest request) throws ApplicationException {
+	public void deletePurchase(@PathVariable("purchaseId") long id, HttpServletRequest request)
+			throws ApplicationException {
 		PostLoginUserData userData = (PostLoginUserData) request.getAttribute("userData");
 		purchasesController.deletePurchase(id, userData);
 	}
@@ -42,22 +43,24 @@ public class PurchasesApi {
 	public Purchase getPurchase(@PathVariable long id) throws ApplicationException {
 		return purchasesController.getPurchase(id);
 	}
-	
+
 	@GetMapping
 	public List<Purchase> getAllPurchases() throws ApplicationException {
 		return purchasesController.getAllPurchases();
 	}
-	
+
 	@GetMapping("/byCompany")
-	public List<Purchase> getCompanyPurchases(@RequestParam("id") long companyId, HttpServletRequest request) throws ApplicationException {
+	public List<Purchase> getCompanyPurchases(@RequestParam("id") long companyId, HttpServletRequest request)
+			throws ApplicationException {
 		PostLoginUserData userData = (PostLoginUserData) request.getAttribute("userData");
 		return purchasesController.getCompanyPurchases(companyId, userData);
 	}
-	
+
 	@GetMapping("/byCustomer")
-	public List<Purchase> getCustomerPurchases(@RequestParam("id") long customerId, HttpServletRequest request) throws ApplicationException {
+	public List<Purchase> getCustomerPurchases(@RequestParam("id") long customerId, HttpServletRequest request)
+			throws ApplicationException {
 		PostLoginUserData userData = (PostLoginUserData) request.getAttribute("userData");
 		return purchasesController.getCustomerPurchases(customerId, userData);
 	}
-	
+
 }

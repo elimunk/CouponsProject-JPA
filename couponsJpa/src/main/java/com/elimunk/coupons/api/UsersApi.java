@@ -28,8 +28,8 @@ public class UsersApi {
 	private UsersController usersController;
 	
 	@PostMapping
-	public void createUser(@RequestBody User user) throws ApplicationException {
-		usersController.createUser(user);
+	public long createUser(@RequestBody User user) throws ApplicationException {
+		return usersController.createUser(user);
 	}
 	
 	@PutMapping()

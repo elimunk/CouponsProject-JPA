@@ -28,6 +28,7 @@ public class CustomersApi {
 	
 	@PostMapping()
 	public void createCustomer(@RequestBody Customer customer) throws ApplicationException {
+		System.out.println(customer.toString());
 		customersController.createCustomer(customer);
 	}
 	

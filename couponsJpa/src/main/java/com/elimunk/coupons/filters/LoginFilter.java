@@ -39,11 +39,10 @@ public class LoginFilter implements Filter{
 			chain.doFilter(request, response);
 			return;
 		} else {
-			
 			String token = req.getParameter("token");
 			System.out.println(token + "23");
 			PostLoginUserData userData = (PostLoginUserData) cacheManager.get(token);
-
+			
 			if (userData != null) {
 				request.setAttribute("userData", userData);
 				chain.doFilter(request, response);

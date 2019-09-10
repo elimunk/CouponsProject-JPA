@@ -16,45 +16,33 @@ import com.elimunk.coupons.enums.ClientType;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable{
+public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	// Properties
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name = "user_id")
 	private long id;
-	
+
 	@Column(name = "user_name", unique = true, nullable = false)
 	private String userName;
-	
+
 	@Column(name = "password", nullable = false)
 	private String password;
-	
+
 	@Column(name = "type", nullable = false)
-    @Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.STRING)
 	private ClientType type;
-	
+
 	@JoinColumn(nullable = true)
 	@ManyToOne
 	private Company company;
-	
+
 	// constructors
 
-	public User(String userName, String password, Company userCompany, ClientType type) {
-		this(userName, password, type);
-		this.company = userCompany;
-	}
-	
-	public User(String userName, String password, ClientType type) {
-		this.userName = userName;
-		this.password = password;
-		this.type = type;
-		this.company=null;
-	}
-	
 	public User() {
 	}
 
@@ -99,14 +87,16 @@ public class User implements Serializable{
 	public void setType(ClientType type) {
 		this.type = type;
 	}
-	
+
 	private String printCompanyIdIfExsit() {
-		return (this.getCompany() !=null && this.getCompany().getId() !=0) ?", CompanyId: " + getCompany().getId() : "";
+		return (this.getCompany() != null && this.getCompany().getId() != 0) ? ", CompanyId: " + getCompany().getId(): "";
 	}
-	
+
+	// methods
+
 	@Override
 	public String toString() {
-		return "User Id: " + getId() + ", Username: " + getUserName() + ", Type: " + getType()
-				+ printCompanyIdIfExsit() + "\n";
+		return "User Id: " + getId() + ", Username: " + getUserName() + ", Type: " + getType() + printCompanyIdIfExsit()
+				+ "\n";
 	}
 }

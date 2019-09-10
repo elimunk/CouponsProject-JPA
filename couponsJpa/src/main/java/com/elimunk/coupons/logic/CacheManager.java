@@ -10,15 +10,15 @@ import com.elimunk.coupons.beans.PostLoginUserData;
 @Component
 public class CacheManager implements ICacheManager{
 		
-		private Map<Object , PostLoginUserData> map;
+		private Map<Object , Object> map;
 		
 		public CacheManager() {
 			this.map = new HashMap<>();
 		}
 
 		@Override
-		public void put(Object token, PostLoginUserData value) {
-			this.map.put(token,  value);
+		public void put(Object token, Object postLoginUserData ) {
+			this.map.put(token,  postLoginUserData);
 		}
 
 		@Override

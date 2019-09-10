@@ -15,16 +15,15 @@ import com.elimunk.coupons.exceptions.ApplicationException;
 import com.elimunk.coupons.utils.DateUtils;
 import com.elimunk.coupons.utils.ValidateUtils;
 
-//this is the companies logic level to control of all operations of the companies 
 @Controller
 public class CompaniesController {
 	
-	// Instances of 'CompaniesDao' level for the company operations 
 	@Autowired
 	private ICompaniesDao companyDao;
 	
 	public CompaniesController() {
 	}
+	
 	
 	public void createCompany(Company company, PostLoginUserData userData) throws ApplicationException {
 		validateUserAccess(userData);
@@ -53,11 +52,11 @@ public class CompaniesController {
 
 	public Company getCompany(long companyId) throws ApplicationException {
 		validateExistCompany(companyId);
-		return companyDao.findById(companyId);
+		return companyDao.findById(companyId).get();
 	}
 	
 	public List<Company> getAllCompanies() throws ApplicationException {
-		List<Company> allCompanies = companyDao.findAll();
+		List<Company> allCompanies = (List<Company>) companyDao.findAll();
 		return allCompanies;
 	}
 	

@@ -18,23 +18,19 @@ import com.elimunk.coupons.enums.ErrorTypes;
 import com.elimunk.coupons.exceptions.ApplicationException;
 import com.elimunk.coupons.utils.DateUtils;
 
-//this is the coupons logic level to control of all operations of the coupons 
 @Controller
 public class CouponsController {
-
-// properties
 
 	@Autowired
 	private ICouponsDao couponDao;
 	@Autowired
 	private ICompaniesDao companyDao;
 
-//	constructor
 	public CouponsController() {
 	}
 
 	public long createCoupon(Coupon coupon, PostLoginUserData userData) throws ApplicationException {
-		Company company = companyDao.findById((long) userData.getCompanyId());
+		Company company = companyDao.findById((long) userData.getCompanyId()).get();
 		coupon.setCompany(company);
 		// checks that the user have the correct company Id
 		validateUserAccess(coupon.getCompany().getId(), userData);
@@ -64,7 +60,7 @@ public class CouponsController {
 
 	@Transactional
 	public void deleteCoupon(long couponId, PostLoginUserData userData) throws ApplicationException {
-		Coupon coupon = couponDao.findById(couponId);
+		Coupon coupon = couponDao.findById(couponId).get();
 		// Check if the coupon exists. before the action
 		validateExistCoupon(couponId);
 		// checks that the user have the correct company Id
@@ -75,11 +71,11 @@ public class CouponsController {
 	}
 
 	public Coupon getCoupon(long couponId) throws ApplicationException {
-		return couponDao.findById(couponId);
+		return couponDao.findById(couponId).get();
 	}
 
 	public List<Coupon> getAllCoupons() throws ApplicationException {
-		List<Coupon> coupons = couponDao.findAll();
+		List<Coupon> coupons = (List<Coupon>) couponDao.findAll();
 		return coupons;
 	}
 	public List<Coupon> getCouponsByCategory(Category category) throws ApplicationException {
@@ -93,19 +89,19 @@ public class CouponsController {
 	}
 
 	public List<Coupon> getCompanyCoupons(long companyId) throws ApplicationException {
-		Company company = companyDao.findById(companyId);
+		Company company = companyDao.findById(companyId).get();
 		List<Coupon> coupons = couponDao.findByCompany(company);
 		return coupons;
 	}
 
 	public List<Coupon> getCompanyCouponsByCategory(long companyId, Category category) throws ApplicationException {
-		Company company = companyDao.findById(companyId);
+		Company company = companyDao.findById(companyId).get();
 		List<Coupon> coupons = couponDao.findByCompanyAndCategory(company, category);
 		return coupons;
 	}
 
 	public List<Coupon> getCompanyCouponsByMaxPrice(long companyId, double maxPrice) throws ApplicationException {
-		Company company = companyDao.findById(companyId);
+		Company company = companyDao.findById(companyId).get();
 		List<Coupon> coupons = couponDao.findByCompanyAndMaxPrice(company, maxPrice);
 		return coupons;
 	}
@@ -123,12 +119,14 @@ public class CouponsController {
 		return couponDao.findByCustomerAndCategory(customerId, category);
 	}
 
-	/*
+	/**
 	 * validate the coupons before adding or updating . coupon companyId - the
 	 * company has to exist coupon description - must contain minimum 15 characters
 	 * coupon endDate - cannot be earlier than the Start date or current date coupon
 	 * amount - must be a positive number coupon price - must be a positive number
-	 * if any parameter is invalid - ApplicationException will be thrown
+	 * 
+	 * @param coupon to validate
+	 * @throws ApplicationException - if any parameter is invalid
 	 */
 	private void validateCoupon(Coupon coupon) throws ApplicationException {
 		if (!companyDao.existsById(coupon.getCompany().getId())) {
@@ -157,8 +155,10 @@ public class CouponsController {
 		}
 	}
 
-	// validate coupon title that not already exist, and that contain 2 - 50
-	// characters
+	/**
+	 * validate coupon title that not already exist, and that contain 2 - 50 characters
+	 * 
+	 */
 	private void validateTitleCoupon(Coupon coupon) throws ApplicationException {
 		if (couponDao.existsByTitle(coupon.getTitle())) {
 			throw new ApplicationException(ErrorTypes.TITLE_EXIST, DateUtils.getCurrentDateAndTime(),

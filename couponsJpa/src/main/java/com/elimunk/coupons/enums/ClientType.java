@@ -1,6 +1,6 @@
 package com.elimunk.coupons.enums;
 
-// contains the types of the client of the system
+// client types
 public enum ClientType {
 
 	ADMINISTRATOR,

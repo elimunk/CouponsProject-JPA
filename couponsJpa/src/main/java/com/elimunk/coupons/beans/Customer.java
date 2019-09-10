@@ -18,52 +18,41 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "customers")
-public class Customer implements Serializable{
+public class Customer implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	// Properties
+
 	@Id
 	@Column(name = "customer_id")
 	private long Id;
-	
+
 	@Column(name = "first_name", nullable = false)
 	private String firstName;
-	
+
 	@Column(name = "last_name", nullable = false)
 	private String lastName;
-	
-	@Column(name = "email", nullable = false, unique=true )
+
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
-	
-	@Column(name = "phone_number", nullable = false, unique=true)
+
+	@Column(name = "phone_number", nullable = false, unique = true)
 	private String phoneNumber;
-	
-	@JoinColumn(name = "user", nullable = false, unique=true)
-	@OneToOne( cascade=CascadeType.ALL, fetch= FetchType.EAGER)
+
+	@JoinColumn(name = "user", nullable = false, unique = true)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private User userCustomer;
-	
+
+	@JoinColumn(name = "address", nullable = false, unique = false)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Address address;
+
 	@JsonIgnore
-	@OneToMany(mappedBy="customer", cascade=CascadeType.REMOVE, fetch = FetchType.LAZY )
-	private List <Purchase> purchases = new ArrayList<>();
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	private List<Purchase> purchases = new ArrayList<>();
 
-	
 	// constructor
-
-	public Customer(String firstName, String lastName, String email, String phoneNumber, User userCustomer) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.userCustomer = userCustomer;
-	}
-	
-	public Customer(long id, String firstName, String lastName, String email, String phoneNumber) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-	}
 
 	public Customer() {
 	}
@@ -117,13 +106,22 @@ public class Customer implements Serializable{
 	public void setUserCustomer(User userCustomer) {
 		this.userCustomer = userCustomer;
 	}
-	
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address userAddress) {
+		this.address = userAddress;
+	}
+
 	// methods
 
 	@Override
 	public String toString() {
 		return "Cusromer Id: " + getId() + ", First Name: " + getFirstName() + ", Last Name: " + getLastName()
-				+ ", Email: " + getEmail()+ ", Phone number: " + getPhoneNumber() /* + "Login details: "+ userCustomer.toString() */+ "\n" ;
+				+ ", Email: " + getEmail() + ", Phone number: " + getPhoneNumber() + ", Address: " + getAddress()
+				+ "\n";
 	}
 
 }

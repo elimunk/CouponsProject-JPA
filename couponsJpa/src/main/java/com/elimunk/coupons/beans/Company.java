@@ -17,11 +17,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "companies")
-public class Company implements Serializable{
+public class Company implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	// Properties
+
 	@Id
 	@GeneratedValue
 	@Column(name = "company_id")
@@ -30,23 +31,18 @@ public class Company implements Serializable{
 	@Column(name = "company_name", unique = true, nullable = false)
 	private String name;
 
-	@Column(name = "company_logo", length=2000, unique = true)
+	@Column(name = "company_logo", length = 2000, unique = true)
 	private String logo;
 
 	@JsonIgnore
-	@OneToMany(mappedBy="company" ,cascade=CascadeType.REMOVE , fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<Coupon> companyCoupons = new ArrayList<>();
 
 	@JsonIgnore
-	@OneToMany(mappedBy="company" ,cascade=CascadeType.REMOVE , fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<User> companyUsers = new ArrayList<>();
 
-	
-	// constructor - (using setters)
-	public Company(String name, String logo) {
-		this.name = name;
-		this.logo = logo;
-	}
+	// constructor
 
 	public Company() {
 	}

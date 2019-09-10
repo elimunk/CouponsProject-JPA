@@ -11,21 +11,21 @@ import org.springframework.stereotype.Controller;
 import com.elimunk.coupons.beans.Company;
 import com.elimunk.coupons.beans.Coupon;
 import com.elimunk.coupons.beans.Customer;
+import com.elimunk.coupons.beans.Discount;
 import com.elimunk.coupons.beans.PostLoginUserData;
 import com.elimunk.coupons.beans.Purchase;
 import com.elimunk.coupons.dao.ICompaniesDao;
 import com.elimunk.coupons.dao.ICouponsDao;
 import com.elimunk.coupons.dao.ICustomersDao;
+import com.elimunk.coupons.dao.IDiscountDao;
 import com.elimunk.coupons.dao.IPurchasesDao;
 import com.elimunk.coupons.enums.ErrorTypes;
 import com.elimunk.coupons.exceptions.ApplicationException;
 import com.elimunk.coupons.utils.DateUtils;
 
-//this is the purchases logic level to control of all operations of the purchases 
 @Controller
 public class PurchasesController {
 
-	// Instances of 'Dao' levels for the purchase operations
 	@Autowired
 	private ICouponsDao couponsDao;
 	@Autowired
@@ -34,11 +34,12 @@ public class PurchasesController {
 	private ICompaniesDao companiesDao;
 	@Autowired
 	private ICustomersDao customersDao;
+	@Autowired
+	private IDiscountDao discountDao;
 
 	public PurchasesController() {
 	}
 
-//	methods
 	@Transactional
 	public long createPurchace(Purchase purchase, PostLoginUserData userData) throws ApplicationException {
 		if (userData.getClientType().name() != "CUSTOMER" && userData.getClientType().name() != "ADMINISTRATOR") {
@@ -51,9 +52,22 @@ public class PurchasesController {
 		long purchaseId = purchasesDao.save(purchase).getId();
 		// after purchase update the coupon amount
 		couponsDao.updateCouponAmount(purchase.getCoupon().getId(), purchase.getAmount());
-	    // update Coupon InStock after purchase if coupon amount will be 0
+		// update the discount amount if used
+		if (purchase.getDiscountCode() != null) {
+			Discount discount = discountDao.findByCode(purchase.getDiscountCode());
+			if (discount != null) {
+				discountDao.updateDiscountAmountLeft(purchase.getDiscountCode());
+				//
+				discountDao.updateDiscountAmountOfUses(purchase.getDiscountCode());
+				//
+				if (discount.getAmountLeft() - 1 == 0) {
+					discountDao.delete(discount);
+				}
+			}
+		}
+		// update Coupon InStock after purchase if coupon amount will be 0
 		if (purchase.getAmount() - purchase.getCoupon().getAmount() == 0) {
-			couponsDao.updateCouponInStock( purchase.getCoupon().getId(), false);
+			couponsDao.updateCouponInStock(purchase.getCoupon().getId(), false);
 		}
 		return purchaseId;
 	}
@@ -73,16 +87,16 @@ public class PurchasesController {
 		// Check if the purchase exists. before the action
 		validateExistPurchase(purchaseId);
 		// Get the purchase from the database
-		return purchasesDao.findById(purchaseId);
+		return purchasesDao.findById(purchaseId).get();
 	}
 
 	public List<Purchase> getAllPurchases() throws ApplicationException {
-		return purchasesDao.findAll();
+		return (List<Purchase>) purchasesDao.findAll();
 	}
 
 	public List<Purchase> getCompanyPurchases(long companyId, PostLoginUserData userData) throws ApplicationException {
 
-		Company company = companiesDao.findById(companyId);
+		Company company = companiesDao.findById(companyId).get();
 
 		if (userData.getClientType().name() != "ADMINISTRATOR") {
 			return purchasesDao.findByCompanyId(companyId);
@@ -97,7 +111,7 @@ public class PurchasesController {
 	public List<Purchase> getCustomerPurchases(long customerId, PostLoginUserData userData)
 			throws ApplicationException {
 
-		Customer customer = customersDao.findById(customerId);
+		Customer customer = customersDao.findById(customerId).get();
 
 		if (userData.getClientType().name() != "ADMINISTRATOR") {
 			return purchasesDao.findByCustomer(customer);
@@ -111,7 +125,7 @@ public class PurchasesController {
 
 	// validate the purchase before adding or updating .
 	private void validatePurchase(Purchase purchase) throws ApplicationException {
-		Coupon coupon = couponsDao.findById(purchase.getCoupon().getId());
+		Coupon coupon = couponsDao.findById(purchase.getCoupon().getId()).get();
 		// the coupon purchase has to exist
 		if (coupon == null) {
 			throw new ApplicationException(ErrorTypes.NOT_EXIST, DateUtils.getCurrentDateAndTime(),

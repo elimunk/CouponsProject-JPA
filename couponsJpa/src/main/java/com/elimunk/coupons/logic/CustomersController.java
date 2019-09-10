@@ -15,7 +15,6 @@ import com.elimunk.coupons.exceptions.ApplicationException;
 import com.elimunk.coupons.utils.DateUtils;
 import com.elimunk.coupons.utils.ValidateUtils;
 
-//this is the customers logic level to control of all operations of the customers 
 @Controller
 public class CustomersController {
 
@@ -27,9 +26,7 @@ public class CustomersController {
 	public CustomersController() {
 	}
 
-	
-//	methods
-	
+		
 	@Transactional
 	public void createCustomer(Customer customer) throws ApplicationException {
 		// create (and validate) the user of customer by 'usersController' level 
@@ -38,6 +35,7 @@ public class CustomersController {
 		// validate the customer before the creating 
 		validateCustomer(customer);
 		validateEmailNotExist(customer);
+		validatePhoneNotExist(customer);
 		// if the customer is valid - add to the database.
 		customerDao.save(customer);
 	}
@@ -49,8 +47,12 @@ public class CustomersController {
 		// Check if the customer changes is valid for update. before the action
 		validateCustomer(customer);
 		// if customer change the email, validate that the email not already taken
-		if (!customerDao.findById(customer.getId()).getEmail().equals(customer.getEmail())) {
+		if (!customerDao.findById(customer.getId()).get().getEmail().equals(customer.getEmail())) {
 			validateEmailNotExist(customer);
+		}
+		// if customer change the Phone, validate that the Phone not already taken
+		if (!customerDao.findById(customer.getId()).get().getPhoneNumber().equals(customer.getPhoneNumber())) {
+			validatePhoneNotExist(customer);
 		}
 		// Update the customer in the database
 		customerDao.save(customer);
@@ -66,15 +68,15 @@ public class CustomersController {
 	}
 
 	public Customer getCustomer(long customerId) throws ApplicationException {
-		return customerDao.findById(customerId);
+		return customerDao.findById(customerId).get();
 	}
 	
 	public Customer getCustomerDetails(long costomerId) throws Exception {
-		return customerDao.findById(costomerId);
+		return customerDao.findById(costomerId).get();
 	}
 	
 	public List<Customer> getAllCustomers() throws ApplicationException {
-		return customerDao.findAll();
+		return (List<Customer>) customerDao.findAll();
 	}
 	
 	// validate the customer before adding or updating .
@@ -110,6 +112,12 @@ public class CustomersController {
 		// the customer email cannot be taken
 		if (customerDao.existsByEmail(customer.getEmail())) {
 			throw new ApplicationException(ErrorTypes.EMAIL_EXIST, DateUtils.getCurrentDateAndTime(), "The Email address already taken. ",false);
+		}
+	}
+	private void validatePhoneNotExist(Customer customer) throws ApplicationException {
+		// the customer email cannot be taken
+		if (customerDao.existsByPhoneNumber(customer.getPhoneNumber())) {
+			throw new ApplicationException(ErrorTypes.PHONE_EXIST, DateUtils.getCurrentDateAndTime(), "The Phone number already taken. ",false);
 		}
 	}
 

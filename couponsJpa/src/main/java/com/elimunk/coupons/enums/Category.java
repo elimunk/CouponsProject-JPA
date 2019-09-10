@@ -1,6 +1,6 @@
 package com.elimunk.coupons.enums;
 
-// contains the categories for the coupons of the system
+// coupon categories 
 public enum Category {
 
 	FOOD,
@@ -19,7 +19,8 @@ public enum Category {
 	BEAUTY,
 	PETS,
 	ARTS,
-	FASHION;
+	FASHION,
+	CAMERAS;
 	
 	
 }

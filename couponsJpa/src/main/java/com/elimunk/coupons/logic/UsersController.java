@@ -54,7 +54,7 @@ public class UsersController {
 		// validate the update user before the creating
 		validateUpdateUser(user);
 		// if user change the userName, validate that the userName not already taken
-		if (!userDao.findById(user.getId()).getUserName().equals(user.getUserName())) {
+		if (!userDao.findById(user.getId()).get().getUserName().equals(user.getUserName())) {
 			validateUaerNameNotExist(user);
 		}
 		// Update the user in the database
@@ -73,15 +73,15 @@ public class UsersController {
 		// Check if the user exists. before the action
 		validateExistUser(userId);
 		// Get the user from the database
-		return userDao.findById(userId);
+		return userDao.findById(userId).get();
 	}
 
 	public List<User> getAllUsers() throws ApplicationException {
-		return userDao.findAll();
+		return (List<User>) userDao.findAll();
 	}
 
 	public List<User> getCompanyUsers(long companyId) throws ApplicationException {
-		Company company = companyDao.findById(companyId);
+		Company company = companyDao.findById(companyId).get();
 		return userDao.findByCompany(company);
 	}
 
