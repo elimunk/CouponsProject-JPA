@@ -1,5 +1,6 @@
 package com.elimunk.coupons.beans;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,11 +14,17 @@ public class Address {
 
 	@Id
 	@GeneratedValue
+	@Column(name = "id", unique = true, nullable = false)
 	private long id;
+	@Column(name = "country", unique = false, nullable = false)
 	private String country;
+	@Column(name = "city", unique = false, nullable = false)
 	private String city;
+	@Column(name = "street", unique = false, nullable = false)
 	private String street;
+	@Column(name = "number", unique = false, nullable = false)
 	private int number;
+	@Column(name = "zipCode", unique = false, nullable = false)
 	private int zipCode;
 
 	// constructor
@@ -80,7 +87,6 @@ public class Address {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "Street: " + getStreet() + " Country: " + getCountry() + " City: " + getCity() + " zip code: "
 				+ getZipCode() + " \n";
 	}

@@ -91,10 +91,12 @@ public class Discount {
 	}
 
 	// methods
-
+	
 	@Override
 	public String toString() {
-		return " Discount: " + getCode() + " , " + getDiscount() + " , " + getAmount() + " ";
+		return "Discount [code=" + code + ", discount=" + discount + ", expired=" + expired + ", amount=" + amount
+				+ ", amountOfUses=" + amountOfUses + ", amountLeft=" + amountLeft + "]";
 	}
+
 
 }
